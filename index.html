@@ -340,7 +340,7 @@
             <button class="dur-chip" data-d="20">20s</button>
           </div>
           <button class="btn btn-primary" id="btnStart" disabled>▶ Lancer la mesure</button>
-          <button class="btn btn-ghost" id="btnNew">↺ Nouvelle mesure</button>
+          <button class="btn btn-ghost" id="btnNew">↺ Reset All</button>
         </div>
       </div>
     </section>
@@ -647,9 +647,16 @@ function stopMeasure() {
 
 function newRound() {
   if (measuring) return;
+  teams.forEach(t => t.score = 0);
+  selectedId = null;
+  save();
   document.getElementById('meterValue').textContent = '0';
   document.getElementById('meterFill').style.width = '0%';
+  document.getElementById('btnStart').disabled = true;
   resetBars();
+  renderTeams();
+  renderRanking();
+  updateLiveLabel();
 }
 
 // ========== RENAME ==========
