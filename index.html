@@ -1,727 +1,732 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Applaudimètre IAGen</title>
-  <style>
-    :root {
-      --bg: #f4f7fb;
-      --card: #ffffff;
-      --text: #122033;
-      --muted: #627086;
-      --primary: #0b5cab;
-      --primary-2: #1d7fe2;
-      --accent: #12b886;
-      --danger: #e03131;
-      --gold: #f59f00;
-      --silver: #adb5bd;
-      --bronze: #b26b3b;
-      --border: #dbe4f0;
-      --shadow: 0 16px 40px rgba(16, 32, 55, 0.12);
-      --radius: 20px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Applaudimètre IAGen</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f4fa;
+    --card: #ffffff;
+    --text: #0f1d31;
+    --muted: #627086;
+    --primary: #0b5cab;
+    --primary-2: #1d7fe2;
+    --accent: #12b886;
+    --danger: #e03131;
+    --gold: #f59f00;
+    --silver: #adb5bd;
+    --bronze: #b26b3b;
+    --border: #dbe4f0;
+    --shadow: 0 8px 32px rgba(16,32,55,0.10);
+    --radius: 16px;
+  }
 
-    * { box-sizing: border-box; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(29,127,226,0.16), transparent 25%),
-        linear-gradient(180deg, #f8fbff 0%, var(--bg) 100%);
-      color: var(--text);
-      min-height: 100vh;
-    }
+  html, body {
+    height: 100%; overflow: hidden;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background: linear-gradient(160deg, #f8fbff 0%, var(--bg) 40%, #e8eef8 100%);
+    color: var(--text);
+  }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px;
-    }
+  /* === FULL VIEWPORT SHELL === */
+  .shell {
+    height: 100vh; width: 100vw;
+    display: flex; flex-direction: column;
+    padding: 14px 20px 12px;
+    gap: 10px;
+  }
 
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      margin-bottom: 24px;
-      background: rgba(255,255,255,0.8);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.8);
-      box-shadow: var(--shadow);
-      border-radius: 28px;
-      padding: 20px 24px;
-    }
+  /* === HEADER === */
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(255,255,255,0.85); backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.9); box-shadow: var(--shadow);
+    border-radius: 20px; padding: 10px 20px;
+    flex-shrink: 0;
+  }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand img {
+    height: 40px; background: white; border-radius: 10px;
+    padding: 4px 8px; border: 1px solid var(--border);
+  }
+  .brand h1 {
+    font-family: 'Outfit', sans-serif; font-weight: 900;
+    font-size: 1.5rem; letter-spacing: -0.03em; line-height: 1.1;
+  }
+  .brand h1 small {
+    display: block; font-size: 0.52em; font-weight: 500;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--muted); letter-spacing: 0; margin-top: 1px;
+  }
+  .pill {
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    color: white; border-radius: 999px; padding: 8px 14px;
+    font-weight: 700; font-size: 0.8rem; white-space: nowrap;
+    box-shadow: 0 6px 18px rgba(11,92,171,0.2);
+  }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      min-width: 0;
-    }
+  /* === MAIN LAYOUT === */
+  .layout {
+    flex: 1; min-height: 0;
+    display: grid; grid-template-columns: 1.15fr 0.85fr;
+    gap: 12px;
+  }
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 14px 18px; display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .card h2 {
+    font-family: 'Outfit', sans-serif; font-weight: 800;
+    font-size: 1.05rem; margin-bottom: 4px;
+  }
+  .sub { color: var(--muted); font-size: 0.78rem; margin-bottom: 8px; line-height: 1.3; }
 
-    .brand img {
-      height: 54px;
-      width: auto;
-      display: block;
-      background: white;
-      border-radius: 14px;
-      padding: 6px 10px;
-      border: 1px solid var(--border);
-    }
+  /* === TEAM GRID === */
+  .team-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 6px; margin-bottom: 10px;
+  }
+  .team-btn {
+    appearance: none; border: 2px solid var(--border); background: #f8fbff;
+    border-radius: 12px; padding: 7px 4px; cursor: pointer;
+    text-align: center; transition: all 0.15s; font-family: inherit;
+  }
+  .team-btn:hover { border-color: var(--primary-2); transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(29,127,226,0.12); }
+  .team-btn.active { background: linear-gradient(135deg, rgba(11,92,171,0.10), rgba(29,127,226,0.16));
+    border-color: var(--primary); }
+  .team-btn .tnum {
+    font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1.15rem;
+    color: var(--primary); line-height: 1.2;
+  }
+  .team-btn .tname {
+    font-size: 0.68rem; font-weight: 600; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .team-btn .tscore {
+    font-size: 0.62rem; color: var(--muted); font-weight: 600;
+  }
+  .team-btn.scored .tnum { color: var(--accent); }
 
-    .title-wrap h1 {
-      margin: 0;
-      font-size: clamp(1.5rem, 2.4vw, 2.5rem);
-      line-height: 1.05;
-    }
+  /* === LIVE ZONE === */
+  .live-zone {
+    flex: 1; display: flex; flex-direction: column;
+    background: linear-gradient(180deg, #fbfdff, #f2f7ff);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 12px 16px; min-height: 0;
+  }
+  .live-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+  }
+  .live-team {
+    font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.1rem;
+    color: var(--primary);
+  }
+  .live-timer {
+    font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1.3rem;
+    color: var(--danger); opacity: 0; transition: opacity 0.2s;
+  }
+  .live-timer.visible { opacity: 1; }
 
-    .title-wrap p {
-      margin: 6px 0 0;
-      color: var(--muted);
-      font-size: 0.98rem;
-    }
+  /* Meter display */
+  .meter-row {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 6px;
+  }
+  .meter-big {
+    font-family: 'Outfit', sans-serif; font-weight: 900;
+    font-size: 3.8rem; line-height: 1; min-width: 100px; text-align: right;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .meter-bar-wrap { flex: 1; }
+  .meter-track {
+    height: 28px; background: #e0e8f4; border-radius: 999px;
+    overflow: hidden; position: relative;
+  }
+  .meter-fill {
+    height: 100%; width: 0%; border-radius: 999px;
+    background: linear-gradient(90deg, #74c0fc 0%, #1d7fe2 40%, #12b886 100%);
+    transition: width 0.06s linear;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
+  }
+  .meter-labels {
+    display: flex; justify-content: space-between;
+    font-size: 0.7rem; color: var(--muted); font-weight: 600; margin-top: 3px;
+  }
 
-    .pill {
-      background: linear-gradient(135deg, var(--primary), var(--primary-2));
-      color: white;
-      border-radius: 999px;
-      padding: 12px 16px;
-      font-weight: 700;
-      white-space: nowrap;
-      box-shadow: 0 12px 24px rgba(11, 92, 171, 0.2);
-    }
+  /* Frequency bars */
+  .freq-bars {
+    display: flex; align-items: flex-end; justify-content: center;
+    gap: 2px; height: 44px; margin: 6px 0;
+  }
+  .fbar {
+    width: 5px; min-height: 3px; border-radius: 2px;
+    background: linear-gradient(to top, var(--primary-2), var(--accent));
+    transition: height 0.05s ease-out; opacity: 0.75;
+  }
 
-    .layout {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 24px;
-      align-items: start;
-    }
+  /* Controls row */
+  .ctrl-row {
+    display: flex; gap: 8px; align-items: center; margin-top: auto; padding-top: 8px;
+  }
+  .btn {
+    appearance: none; border: none; border-radius: 14px; cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700;
+    font-size: 0.85rem; padding: 12px 18px; transition: all 0.15s;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    color: white; box-shadow: 0 8px 20px rgba(11,92,171,0.22);
+    flex: 1;
+  }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-primary.recording {
+    background: linear-gradient(135deg, var(--danger), #ff6b6b);
+    box-shadow: 0 8px 20px rgba(224,49,49,0.25);
+    animation: recPulse 1s infinite;
+  }
+  @keyframes recPulse {
+    0%,100% { box-shadow: 0 8px 20px rgba(224,49,49,0.25); }
+    50% { box-shadow: 0 8px 28px rgba(224,49,49,0.45); }
+  }
+  .btn-ghost {
+    background: #f0f4fa; color: var(--text); border: 1px solid var(--border);
+  }
+  .btn-danger { background: #fff5f5; color: var(--danger); border: 1px solid rgba(224,49,49,0.2); }
 
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 22px;
-    }
+  .dur-chips { display: flex; gap: 4px; }
+  .dur-chip {
+    appearance: none; border: 1px solid var(--border); background: transparent;
+    border-radius: 99px; padding: 6px 12px; font-size: 0.75rem;
+    font-weight: 700; cursor: pointer; font-family: inherit; color: var(--muted);
+    transition: all 0.15s;
+  }
+  .dur-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-    .card h2 {
-      margin: 0 0 8px;
-      font-size: 1.25rem;
-    }
+  /* === RIGHT: RANKING === */
+  .ranking-card { overflow-y: auto; }
+  .ranking-card h2 { margin-bottom: 6px; }
 
-    .sub {
-      color: var(--muted);
-      margin: 0 0 18px;
-      font-size: 0.96rem;
-    }
+  /* Podium */
+  .podium {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 6px; margin-bottom: 8px;
+  }
+  .podium-card {
+    border-radius: 12px; padding: 10px; color: white;
+    display: flex; flex-direction: column; justify-content: space-between;
+    min-height: 80px; box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+  }
+  .podium-card.gold { background: linear-gradient(135deg, #f59f00, #fcc419); }
+  .podium-card.silver { background: linear-gradient(135deg, #868e96, #adb5bd); }
+  .podium-card.bronze { background: linear-gradient(135deg, #9c6644, #b26b3b); }
+  .podium-rank { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; opacity: 0.9; }
+  .podium-team { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 0.9rem; line-height: 1.1; }
+  .podium-pts { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1.5rem; line-height: 1; }
 
-    .team-select {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-bottom: 18px;
-    }
+  .hidden { display: none !important; }
 
-    .team-btn {
-      appearance: none;
-      border: 1px solid var(--border);
-      background: #f8fbff;
-      border-radius: 16px;
-      padding: 14px 16px;
-      font-size: 0.98rem;
-      font-weight: 700;
-      color: var(--text);
-      cursor: pointer;
-      transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease, background 0.12s ease;
-      text-align: left;
-    }
+  /* Ranking table */
+  .ranking-table { width: 100%; border-collapse: collapse; }
+  .ranking-table th, .ranking-table td {
+    padding: 7px 8px; border-bottom: 1px solid #edf2f8;
+    text-align: left; font-size: 0.82rem;
+  }
+  .ranking-table th {
+    color: var(--muted); font-size: 0.7rem; text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .ranking-table tr:last-child td { border-bottom: 0; }
+  .pos {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 28px; height: 28px; border-radius: 999px;
+    background: #eef4fb; font-weight: 900; font-size: 0.8rem;
+  }
+  .medal-1 { background: rgba(245,159,0,0.18); color: #9a6700; }
+  .medal-2 { background: rgba(173,181,189,0.22); color: #5c6770; }
+  .medal-3 { background: rgba(178,107,59,0.2); color: #8a4d24; }
 
-    .team-btn:hover,
-    .team-btn:focus-visible {
-      transform: translateY(-1px);
-      border-color: var(--primary-2);
-      box-shadow: 0 10px 22px rgba(29,127,226,0.14);
-      outline: none;
-    }
+  .rank-bar-bg { width: 70px; height: 6px; background: #e8eef7; border-radius: 3px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+  .rank-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--primary-2), var(--accent)); transition: width 0.5s; }
 
-    .team-btn.active {
-      background: linear-gradient(135deg, rgba(11,92,171,0.12), rgba(29,127,226,0.18));
-      border-color: var(--primary);
-    }
+  .footer-actions { display: flex; gap: 6px; margin-top: auto; padding-top: 8px; flex-wrap: wrap; }
+  .footer-actions .btn { font-size: 0.75rem; padding: 8px 12px; }
 
-    .live-score-wrap {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 16px;
-      align-items: end;
-      margin-bottom: 18px;
-    }
+  /* Mic status dot */
+  .mic-status {
+    display: flex; align-items: center; gap: 6px; font-size: 0.75rem;
+    font-weight: 600; color: var(--muted);
+  }
+  .mic-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--muted);
+  }
+  .mic-dot.on { background: var(--accent); box-shadow: 0 0 6px rgba(18,184,134,0.5); }
+  .mic-dot.err { background: var(--danger); }
 
-    .live-score {
-      font-size: clamp(2.2rem, 8vw, 4.8rem);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 1;
-      margin: 0;
-    }
-
-    .meter-box {
-      background: linear-gradient(180deg, #fbfdff, #f2f7ff);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 18px;
-      margin-bottom: 18px;
-    }
-
-    .meter-track {
-      height: 26px;
-      background: #e8eef7;
-      border-radius: 999px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .meter-fill {
-      height: 100%;
-      width: 0%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #74c0fc 0%, #1d7fe2 45%, #12b886 100%);
-      transition: width 0.08s linear;
-    }
-
-    .meter-labels {
-      margin-top: 10px;
-      display: flex;
-      justify-content: space-between;
-      color: var(--muted);
-      font-size: 0.86rem;
-      font-weight: 600;
-    }
-
-    .controls {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .big-btn,
-    .secondary-btn,
-    .ghost-btn {
-      appearance: none;
-      border: 0;
-      border-radius: 18px;
-      padding: 16px 18px;
-      font-size: 1rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
-    }
-
-    .big-btn:hover,
-    .secondary-btn:hover,
-    .ghost-btn:hover,
-    .big-btn:focus-visible,
-    .secondary-btn:focus-visible,
-    .ghost-btn:focus-visible {
-      transform: translateY(-1px);
-      outline: none;
-    }
-
-    .big-btn {
-      background: linear-gradient(135deg, var(--primary), var(--primary-2));
-      color: white;
-      box-shadow: 0 16px 28px rgba(11, 92, 171, 0.24);
-      min-height: 70px;
-    }
-
-    .secondary-btn {
-      background: linear-gradient(135deg, #0ca678, var(--accent));
-      color: white;
-      box-shadow: 0 16px 28px rgba(18, 184, 134, 0.24);
-    }
-
-    .ghost-btn {
-      background: #f5f7fb;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    .danger {
-      background: #fff5f5;
-      color: var(--danger);
-      border: 1px solid rgba(224,49,49,0.2);
-    }
-
-    .small-note {
-      color: var(--muted);
-      font-size: 0.9rem;
-      line-height: 1.5;
-    }
-
-    .quick-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin: 12px 0 4px;
-    }
-
-    .quick-btn {
-      appearance: none;
-      border: 1px solid var(--border);
-      background: #fafcff;
-      border-radius: 14px;
-      padding: 12px 10px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .ranking-table {
-      width: 100%;
-      border-collapse: collapse;
-      overflow: hidden;
-      border-radius: 16px;
-    }
-
-    .ranking-table th,
-    .ranking-table td {
-      padding: 12px 10px;
-      border-bottom: 1px solid #edf2f8;
-      text-align: left;
-      font-size: 0.95rem;
-    }
-
-    .ranking-table th {
-      color: var(--muted);
-      font-size: 0.84rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .ranking-table tr:last-child td {
-      border-bottom: 0;
-    }
-
-    .pos {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 34px;
-      height: 34px;
-      padding: 0 10px;
-      border-radius: 999px;
-      background: #eef4fb;
-      font-weight: 900;
-    }
-
-    .medal-1 { background: rgba(245, 159, 0, 0.16); color: #9a6700; }
-    .medal-2 { background: rgba(173, 181, 189, 0.2); color: #5c6770; }
-    .medal-3 { background: rgba(178, 107, 59, 0.18); color: #8a4d24; }
-
-    .final-podium {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .podium-card {
-      border-radius: 18px;
-      padding: 16px;
-      color: white;
-      min-height: 130px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-shadow: var(--shadow);
-    }
-
-    .podium-card.gold { background: linear-gradient(135deg, #f59f00, #fcc419); }
-    .podium-card.silver { background: linear-gradient(135deg, #868e96, #adb5bd); }
-    .podium-card.bronze { background: linear-gradient(135deg, #9c6644, #b26b3b); }
-
-    .podium-rank {
-      font-size: 0.88rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      opacity: 0.95;
-    }
-
-    .podium-team {
-      font-size: 1.18rem;
-      font-weight: 900;
-      line-height: 1.1;
-    }
-
-    .podium-score {
-      font-size: 2rem;
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    .footer-actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 16px;
-    }
-
-    .hidden { display: none !important; }
-
-    @media (max-width: 980px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 700px) {
-      .header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .team-select,
-      .controls,
-      .quick-grid,
-      .final-podium {
-        grid-template-columns: 1fr;
-      }
-
-      .live-score-wrap {
-        grid-template-columns: 1fr;
-        align-items: start;
-      }
-
-      .brand {
-        align-items: flex-start;
-      }
-
-      .brand img {
-        height: 44px;
-      }
-    }
-  </style>
+  /* Confetti */
+  .confetti-container {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 999; overflow: hidden;
+  }
+  .confetti-piece {
+    position: absolute; top: -20px;
+    animation: confettiFall linear forwards;
+  }
+  @keyframes confettiFall {
+    to { top: 110vh; transform: rotate(720deg); }
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <div class="brand">
-        <img src="https://www.ter.sncf.com/assets/medias/aleop/headerLogo.svg" alt="Logo Aléop TER SNCF" />
-        <div class="title-wrap">
-          <h1>Applaudimètre IAGen</h1>
-          <p>Votez à l’intensité des applaudissements et établissez le classement final des 10 équipes.</p>
+
+<div class="shell">
+  <!-- HEADER -->
+  <header class="header">
+    <div class="brand">
+      <img src="https://www.ter.sncf.com/assets/medias/aleop/headerLogo.svg" alt="Logo Aléop TER SNCF">
+      <h1>Applaudimètre IAGen<small>Votez à l'intensité des applaudissements — 10 équipes</small></h1>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div class="mic-status">
+        <span class="mic-dot" id="micDot"></span>
+        <span id="micLabel">Micro inactif</span>
+      </div>
+      <div class="pill" id="savedStatus">Mémoire active</div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="layout">
+    <!-- LEFT: Measure -->
+    <section class="card">
+      <h2>🎤 Mesure en direct</h2>
+      <p class="sub">Sélectionnez une équipe, lancez la mesure et le micro capte les applaudissements en temps réel.</p>
+
+      <div class="team-grid" id="teamGrid"></div>
+
+      <div class="live-zone">
+        <div class="live-header">
+          <span class="live-team" id="liveTeamLabel">Sélectionnez une équipe</span>
+          <span class="live-timer" id="liveTimer">10</span>
+        </div>
+
+        <div class="meter-row">
+          <div class="meter-big" id="meterValue">0</div>
+          <div class="meter-bar-wrap">
+            <div class="meter-track">
+              <div class="meter-fill" id="meterFill"></div>
+            </div>
+            <div class="meter-labels">
+              <span>Timide</span><span>Correct</span><span>Tonnerre ! 🔥</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="freq-bars" id="freqBars"></div>
+
+        <div class="ctrl-row">
+          <div class="dur-chips">
+            <button class="dur-chip" data-d="5">5s</button>
+            <button class="dur-chip active" data-d="10">10s</button>
+            <button class="dur-chip" data-d="15">15s</button>
+            <button class="dur-chip" data-d="20">20s</button>
+          </div>
+          <button class="btn btn-primary" id="btnStart" disabled>▶ Lancer la mesure</button>
+          <button class="btn btn-ghost" id="btnNew">↺ Nouvelle mesure</button>
         </div>
       </div>
-      <div class="pill" id="savedStatus">Mémoire locale active</div>
-    </header>
+    </section>
 
-    <main class="layout">
-      <section class="card">
-        <h2>Mesure en direct</h2>
-        <p class="sub">Sélectionnez une équipe, lancez la mesure puis cliquez sur le bouton principal pendant les applaudissements. Le meilleur score est conservé.</p>
+    <!-- RIGHT: Ranking -->
+    <aside class="card ranking-card">
+      <h2>🏆 Classement</h2>
+      <p class="sub">Scores mémorisés dans votre navigateur.</p>
 
-        <div class="team-select" id="teamSelect"></div>
+      <div id="podiumWrap" class="hidden">
+        <div class="podium" id="podium"></div>
+      </div>
 
-        <div class="live-score-wrap">
-          <div>
-            <div class="small-note">Équipe en cours</div>
-            <div class="live-score" id="currentTeamLabel">Équipe 1</div>
-          </div>
-          <div>
-            <div class="small-note">Score en direct</div>
-            <div class="live-score" id="liveScore">0</div>
-          </div>
-        </div>
+      <table class="ranking-table">
+        <thead><tr><th>Rang</th><th>Équipe</th><th>Score</th><th></th></tr></thead>
+        <tbody id="rankingBody"></tbody>
+      </table>
 
-        <div class="meter-box">
-          <div class="meter-track" aria-hidden="true">
-            <div class="meter-fill" id="meterFill"></div>
-          </div>
-          <div class="meter-labels">
-            <span>Timide</span>
-            <span>Correct</span>
-            <span>Tonnerre d’applaudissements</span>
-          </div>
-        </div>
+      <div class="footer-actions">
+        <button class="btn btn-ghost" id="btnRename">✏ Renommer</button>
+        <button class="btn btn-danger" id="btnReset">Réinitialiser tout</button>
+      </div>
+    </aside>
+  </main>
+</div>
 
-        <div class="controls">
-          <button class="big-btn" id="applauseBtn" type="button">👏 Ajouter des applaudissements</button>
-          <button class="secondary-btn" id="saveScoreBtn" type="button">Enregistrer le score</button>
-          <button class="ghost-btn" id="startRoundBtn" type="button">Nouvelle mesure</button>
-          <button class="ghost-btn" id="decayToggleBtn" type="button">Décroissance auto : ON</button>
-        </div>
+<div class="confetti-container" id="confettiBox"></div>
 
-        <div class="quick-grid">
-          <button class="quick-btn" data-burst="5" type="button">+5</button>
-          <button class="quick-btn" data-burst="15" type="button">+15</button>
-          <button class="quick-btn" data-burst="30" type="button">+30</button>
-        </div>
+<script>
+// ========== CONFIG ==========
+const STORAGE_KEY = 'applaudimetre-iagen-v2';
+const TEAM_COUNT = 10;
+const NUM_BARS = 40;
 
-        <p class="small-note">
-          Astuce : vous pouvez cliquer rapidement ou marteler la barre d’espace pour faire monter le score. La mesure redescend progressivement pour simuler un véritable applaudimètre.
-        </p>
-      </section>
+// ========== STATE ==========
+let teams = [];
+let selectedId = null;
+let duration = 10;
+let measuring = false;
 
-      <aside class="card">
-        <h2>Classement final</h2>
-        <p class="sub">Les scores des 10 équipes sont mémorisés dans votre navigateur. Vous pouvez rouvrir la page sans perdre le classement.</p>
+// Audio
+let audioCtx = null, analyser = null, micSource = null, freqData = null;
+let micReady = false;
 
-        <div id="podiumContainer" class="hidden">
-          <div class="final-podium" id="podium"></div>
-        </div>
+// Measure
+let measureRAF = null, timerInterval = null;
+let samples = [];
 
-        <table class="ranking-table">
-          <thead>
-            <tr>
-              <th>Rang</th>
-              <th>Équipe</th>
-              <th>Score</th>
-            </tr>
-          </thead>
-          <tbody id="rankingBody"></tbody>
-        </table>
+// ========== INIT ==========
+function initState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const p = JSON.parse(raw);
+      if (p && Array.isArray(p.teams) && p.teams.length === TEAM_COUNT) {
+        teams = p.teams.map((t, i) => ({
+          id: i + 1,
+          name: (typeof t.name === 'string' && t.name.trim()) ? t.name.trim() : `Équipe ${i+1}`,
+          score: Number.isFinite(t.score) ? Math.max(0, Math.round(t.score)) : 0
+        }));
+        if (p.selectedId) selectedId = p.selectedId;
+        return;
+      }
+    }
+  } catch(e) {}
+  teams = Array.from({length: TEAM_COUNT}, (_, i) => ({
+    id: i + 1, name: `Équipe ${i+1}`, score: 0
+  }));
+}
 
-        <div class="footer-actions">
-          <button class="ghost-btn" id="renameBtn" type="button">Renommer les équipes</button>
-          <button class="ghost-btn danger" id="resetBtn" type="button">Réinitialiser les 10 scores</button>
-        </div>
-      </aside>
-    </main>
-  </div>
+function save() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ teams, selectedId }));
+  flashSaved();
+}
 
-  <script>
-    const STORAGE_KEY = 'applaudimetre-iagen-v1';
-    const TEAM_COUNT = 10;
-    const MAX_METER = 100;
-    const DECAY_PER_TICK = 1.25;
-    const TICK_MS = 90;
+function flashSaved() {
+  const el = document.getElementById('savedStatus');
+  el.textContent = '✓ Sauvegardé';
+  clearTimeout(flashSaved._t);
+  flashSaved._t = setTimeout(() => el.textContent = 'Mémoire active', 1200);
+}
 
-    const defaultState = () => ({
-      teams: Array.from({ length: TEAM_COUNT }, (_, i) => ({
-        id: i + 1,
-        name: `Équipe ${i + 1}`,
-        score: 0
-      })),
-      currentTeamId: 1,
-      decayOn: true
+// ========== AUDIO / MIC ==========
+async function initMic() {
+  if (micReady) return true;
+  const dot = document.getElementById('micDot');
+  const label = document.getElementById('micLabel');
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        echoCancellation: false,
+        noiseSuppression: false,
+        autoGainControl: false
+      }
     });
+    micSource = audioCtx.createMediaStreamSource(stream);
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 1024;
+    analyser.smoothingTimeConstant = 0.4;
+    micSource.connect(analyser);
+    freqData = new Uint8Array(analyser.frequencyBinCount);
+    micReady = true;
+    dot.classList.add('on');
+    label.textContent = 'Micro OK';
+    return true;
+  } catch(e) {
+    dot.classList.add('err');
+    label.textContent = 'Micro refusé !';
+    console.error('Mic error:', e);
+    return false;
+  }
+}
 
-    let state = loadState();
-    let liveValue = 0;
-    let peakValue = 0;
+function getVolume() {
+  analyser.getByteFrequencyData(freqData);
+  // Weighted average — favor mid-high frequencies (applause range ~2-8kHz)
+  let sum = 0, weight = 0;
+  for (let i = 0; i < freqData.length; i++) {
+    // frequency = i * sampleRate / fftSize
+    const freq = i * audioCtx.sampleRate / analyser.fftSize;
+    let w = 1;
+    if (freq > 1000 && freq < 10000) w = 2.5; // applause sweet spot
+    if (freq > 500 && freq <= 1000) w = 1.5;
+    sum += freqData[i] * w;
+    weight += w;
+  }
+  return sum / weight;
+}
 
-    const teamSelect = document.getElementById('teamSelect');
-    const currentTeamLabel = document.getElementById('currentTeamLabel');
-    const liveScore = document.getElementById('liveScore');
-    const meterFill = document.getElementById('meterFill');
-    const rankingBody = document.getElementById('rankingBody');
-    const applauseBtn = document.getElementById('applauseBtn');
-    const saveScoreBtn = document.getElementById('saveScoreBtn');
-    const startRoundBtn = document.getElementById('startRoundBtn');
-    const decayToggleBtn = document.getElementById('decayToggleBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const renameBtn = document.getElementById('renameBtn');
-    const savedStatus = document.getElementById('savedStatus');
-    const podiumContainer = document.getElementById('podiumContainer');
-    const podium = document.getElementById('podium');
+// ========== FREQUENCY BARS ==========
+function initBars() {
+  const el = document.getElementById('freqBars');
+  el.innerHTML = Array.from({length: NUM_BARS}, () => '<div class="fbar"></div>').join('');
+}
 
-    function loadState() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return defaultState();
-        const parsed = JSON.parse(raw);
-        if (!parsed || !Array.isArray(parsed.teams) || parsed.teams.length !== TEAM_COUNT) {
-          return defaultState();
-        }
-        return {
-          teams: parsed.teams.map((team, index) => ({
-            id: index + 1,
-            name: typeof team.name === 'string' && team.name.trim() ? team.name.trim() : `Équipe ${index + 1}`,
-            score: Number.isFinite(team.score) ? Math.max(0, Math.round(team.score)) : 0
-          })),
-          currentTeamId: Number.isInteger(parsed.currentTeamId) ? Math.min(Math.max(parsed.currentTeamId, 1), TEAM_COUNT) : 1,
-          decayOn: typeof parsed.decayOn === 'boolean' ? parsed.decayOn : true
-        };
-      } catch {
-        return defaultState();
-      }
-    }
+function updateBars() {
+  if (!analyser) return;
+  analyser.getByteFrequencyData(freqData);
+  const bars = document.querySelectorAll('.fbar');
+  const step = Math.floor(freqData.length / NUM_BARS);
+  bars.forEach((bar, i) => {
+    const val = freqData[i * step] || 0;
+    const h = Math.max(3, (val / 255) * 44);
+    bar.style.height = h + 'px';
+    const r = val / 255;
+    bar.style.background = r > 0.65
+      ? 'linear-gradient(to top, #e03131, #ff6b6b)'
+      : r > 0.35
+        ? 'linear-gradient(to top, var(--primary-2), var(--accent))'
+        : 'linear-gradient(to top, var(--primary-2), #74c0fc)';
+  });
+}
 
-    function saveState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      flashSaved();
-    }
+function resetBars() {
+  document.querySelectorAll('.fbar').forEach(b => b.style.height = '3px');
+}
 
-    function flashSaved() {
-      savedStatus.textContent = 'Sauvegardé';
-      clearTimeout(flashSaved._t);
-      flashSaved._t = setTimeout(() => {
-        savedStatus.textContent = 'Mémoire locale active';
-      }, 900);
-    }
+// ========== TEAM GRID ==========
+function renderTeams() {
+  const grid = document.getElementById('teamGrid');
+  grid.innerHTML = teams.map(t => {
+    const active = t.id === selectedId ? ' active' : '';
+    const scored = t.score > 0 ? ' scored' : '';
+    return `<button class="team-btn${active}${scored}" data-id="${t.id}">
+      <div class="tnum">${t.id}</div>
+      <div class="tname">${esc(t.name)}</div>
+      <div class="tscore">${t.score > 0 ? t.score + ' pts' : '—'}</div>
+    </button>`;
+  }).join('');
 
-    function getCurrentTeam() {
-      return state.teams.find(team => team.id === state.currentTeamId) || state.teams[0];
-    }
-
-    function renderTeams() {
-      teamSelect.innerHTML = '';
-      state.teams.forEach(team => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'team-btn' + (team.id === state.currentTeamId ? ' active' : '');
-        btn.innerHTML = `${escapeHtml(team.name)}<br><span style="color: var(--muted); font-size: 0.88rem; font-weight: 600;">Score enregistré : ${team.score}</span>`;
-        btn.addEventListener('click', () => {
-          state.currentTeamId = team.id;
-          render();
-          saveState();
-        });
-        teamSelect.appendChild(btn);
-      });
-    }
-
-    function renderLive() {
-      const team = getCurrentTeam();
-      currentTeamLabel.textContent = team.name;
-      liveScore.textContent = Math.round(liveValue);
-      meterFill.style.width = `${Math.max(0, Math.min(100, liveValue))}%`;
-    }
-
-    function sortedTeams() {
-      return [...state.teams].sort((a, b) => b.score - a.score || a.id - b.id);
-    }
-
-    function renderRanking() {
-      const ranked = sortedTeams();
-      rankingBody.innerHTML = '';
-      ranked.forEach((team, index) => {
-        const tr = document.createElement('tr');
-        const medalClass = index === 0 ? 'medal-1' : index === 1 ? 'medal-2' : index === 2 ? 'medal-3' : '';
-        tr.innerHTML = `
-          <td><span class="pos ${medalClass}">${index + 1}</span></td>
-          <td>${escapeHtml(team.name)}</td>
-          <td><strong>${team.score}</strong></td>
-        `;
-        rankingBody.appendChild(tr);
-      });
-
-      podium.innerHTML = '';
-      const top3 = ranked.slice(0, 3).filter(t => t.score > 0);
-      if (top3.length > 0) {
-        podiumContainer.classList.remove('hidden');
-        const styles = ['gold', 'silver', 'bronze'];
-        top3.forEach((team, i) => {
-          const card = document.createElement('div');
-          card.className = `podium-card ${styles[i]}`;
-          card.innerHTML = `
-            <div class="podium-rank">${i + 1}${i === 0 ? 'er' : 'e'} place</div>
-            <div class="podium-team">${escapeHtml(team.name)}</div>
-            <div class="podium-score">${team.score}</div>
-          `;
-          podium.appendChild(card);
-        });
-      } else {
-        podiumContainer.classList.add('hidden');
-      }
-    }
-
-    function renderControls() {
-      decayToggleBtn.textContent = `Décroissance auto : ${state.decayOn ? 'ON' : 'OFF'}`;
-    }
-
-    function render() {
+  grid.querySelectorAll('.team-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (measuring) return;
+      selectedId = parseInt(btn.dataset.id);
+      save();
       renderTeams();
-      renderLive();
-      renderRanking();
-      renderControls();
-    }
-
-    function addApplause(amount = 6) {
-      liveValue = Math.min(MAX_METER, liveValue + amount);
-      peakValue = Math.max(peakValue, liveValue);
-      renderLive();
-    }
-
-    function newRound() {
-      liveValue = 0;
-      peakValue = 0;
-      renderLive();
-    }
-
-    function saveCurrentScore() {
-      const team = getCurrentTeam();
-      team.score = Math.max(team.score, Math.round(peakValue));
-      render();
-      saveState();
-    }
-
-    function renameTeams() {
-      state.teams.forEach((team, index) => {
-        const nextName = prompt(`Nom pour l’équipe ${index + 1} :`, team.name);
-        if (nextName === null) return;
-        const cleaned = nextName.trim();
-        team.name = cleaned || `Équipe ${index + 1}`;
-      });
-      render();
-      saveState();
-    }
-
-    function resetAll() {
-      const ok = confirm('Réinitialiser les 10 équipes, les scores et la mesure en direct ?');
-      if (!ok) return;
-      state = defaultState();
-      newRound();
-      render();
-      saveState();
-    }
-
-    function escapeHtml(str) {
-      return String(str)
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
-    }
-
-    applauseBtn.addEventListener('click', () => addApplause(7));
-    saveScoreBtn.addEventListener('click', saveCurrentScore);
-    startRoundBtn.addEventListener('click', newRound);
-    decayToggleBtn.addEventListener('click', () => {
-      state.decayOn = !state.decayOn;
-      renderControls();
-      saveState();
+      updateLiveLabel();
+      document.getElementById('btnStart').disabled = false;
     });
-    resetBtn.addEventListener('click', resetAll);
-    renameBtn.addEventListener('click', renameTeams);
+  });
+}
 
-    document.querySelectorAll('[data-burst]').forEach(btn => {
-      btn.addEventListener('click', () => addApplause(Number(btn.dataset.burst) || 10));
-    });
+function updateLiveLabel() {
+  const t = teams.find(t => t.id === selectedId);
+  document.getElementById('liveTeamLabel').textContent = t ? t.name : 'Sélectionnez une équipe';
+}
 
-    document.addEventListener('keydown', (event) => {
-      if (event.code === 'Space') {
-        event.preventDefault();
-        addApplause(6);
-      }
-      if (event.code === 'Enter') {
-        saveCurrentScore();
-      }
-    });
+// ========== RANKING ==========
+function renderRanking() {
+  const sorted = [...teams].sort((a, b) => b.score - a.score || a.id - b.id);
+  const maxScore = sorted[0]?.score || 1;
 
-    setInterval(() => {
-      if (!state.decayOn) return;
-      if (liveValue <= 0) return;
-      liveValue = Math.max(0, liveValue - DECAY_PER_TICK);
-      renderLive();
-    }, TICK_MS);
+  // Podium
+  const wrap = document.getElementById('podiumWrap');
+  const pod = document.getElementById('podium');
+  const top3 = sorted.slice(0, 3).filter(t => t.score > 0);
+  if (top3.length > 0) {
+    wrap.classList.remove('hidden');
+    const styles = ['gold', 'silver', 'bronze'];
+    const medals = ['🥇', '🥈', '🥉'];
+    pod.innerHTML = top3.map((t, i) => `
+      <div class="podium-card ${styles[i]}">
+        <div class="podium-rank">${medals[i]} ${i + 1}${i === 0 ? 'er' : 'e'}</div>
+        <div class="podium-team">${esc(t.name)}</div>
+        <div class="podium-pts">${t.score}</div>
+      </div>`).join('');
+  } else {
+    wrap.classList.add('hidden');
+  }
 
-    render();
-  </script>
+  // Table
+  const body = document.getElementById('rankingBody');
+  body.innerHTML = sorted.map((t, i) => {
+    const mc = i === 0 ? 'medal-1' : i === 1 ? 'medal-2' : i === 2 ? 'medal-3' : '';
+    const pct = maxScore > 0 ? (t.score / maxScore) * 100 : 0;
+    return `<tr>
+      <td><span class="pos ${mc}">${i + 1}</span></td>
+      <td>${esc(t.name)}</td>
+      <td><strong>${t.score}</strong></td>
+      <td><div class="rank-bar-bg"><div class="rank-bar-fill" style="width:${pct}%"></div></div></td>
+    </tr>`;
+  }).join('');
+}
+
+// ========== MEASURE ==========
+async function startMeasure() {
+  if (measuring || !selectedId) return;
+  const ok = await initMic();
+  if (!ok) return;
+
+  measuring = true;
+  samples = [];
+  const btn = document.getElementById('btnStart');
+  btn.textContent = '⏺ Écoute en cours…';
+  btn.classList.add('recording');
+  btn.disabled = true;
+
+  // Timer
+  let remaining = duration;
+  const timerEl = document.getElementById('liveTimer');
+  timerEl.classList.add('visible');
+  timerEl.textContent = remaining;
+
+  timerInterval = setInterval(() => {
+    remaining--;
+    timerEl.textContent = remaining;
+    timerEl.style.color = remaining <= 3 ? 'var(--danger)' : '';
+    if (remaining <= 0) stopMeasure();
+  }, 1000);
+
+  // Capture loop
+  function loop() {
+    if (!measuring) return;
+    const vol = getVolume();
+    samples.push(vol);
+    const normalized = Math.min(vol / 120, 1) * 100;
+    document.getElementById('meterValue').textContent = Math.round(normalized);
+    document.getElementById('meterFill').style.width = normalized + '%';
+    updateBars();
+    measureRAF = requestAnimationFrame(loop);
+  }
+  measureRAF = requestAnimationFrame(loop);
+}
+
+function stopMeasure() {
+  measuring = false;
+  clearInterval(timerInterval);
+  cancelAnimationFrame(measureRAF);
+
+  const btn = document.getElementById('btnStart');
+  btn.textContent = '▶ Lancer la mesure';
+  btn.classList.remove('recording');
+  btn.disabled = false;
+
+  document.getElementById('liveTimer').classList.remove('visible');
+  document.getElementById('liveTimer').style.color = '';
+
+  if (samples.length === 0) return;
+
+  // Score: top 50% weighted average → normalize to 0-100
+  const sorted = [...samples].sort((a, b) => b - a);
+  const topHalf = sorted.slice(0, Math.ceil(sorted.length * 0.5));
+  const avg = topHalf.reduce((a, b) => a + b, 0) / topHalf.length;
+  const score = Math.round(Math.min(avg / 1.2, 100));
+
+  // Save best score
+  const team = teams.find(t => t.id === selectedId);
+  if (team) {
+    team.score = Math.max(team.score, score);
+    save();
+  }
+
+  document.getElementById('meterValue').textContent = score;
+  document.getElementById('meterFill').style.width = score + '%';
+
+  renderTeams();
+  renderRanking();
+  resetBars();
+
+  // Confetti if score > 60
+  if (score > 60) launchConfetti();
+}
+
+function newRound() {
+  if (measuring) return;
+  document.getElementById('meterValue').textContent = '0';
+  document.getElementById('meterFill').style.width = '0%';
+  resetBars();
+}
+
+// ========== RENAME ==========
+function renameTeams() {
+  if (measuring) return;
+  teams.forEach((t, i) => {
+    const name = prompt(`Nom de l'équipe ${i + 1} :`, t.name);
+    if (name !== null && name.trim()) t.name = name.trim();
+  });
+  save(); renderTeams(); renderRanking(); updateLiveLabel();
+}
+
+// ========== RESET ==========
+function resetAll() {
+  if (measuring) return;
+  if (!confirm('Réinitialiser tous les scores et noms ?')) return;
+  teams = Array.from({length: TEAM_COUNT}, (_, i) => ({
+    id: i + 1, name: `Équipe ${i+1}`, score: 0
+  }));
+  selectedId = null;
+  save(); renderTeams(); renderRanking(); newRound();
+  updateLiveLabel();
+  document.getElementById('btnStart').disabled = true;
+}
+
+// ========== CONFETTI ==========
+function launchConfetti() {
+  const box = document.getElementById('confettiBox');
+  box.innerHTML = '';
+  const colors = ['#f59f00', '#e03131', '#1d7fe2', '#12b886', '#6c63ff', '#ff6b6b', '#fcc419'];
+  for (let i = 0; i < 70; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.width = (Math.random() * 8 + 5) + 'px';
+    p.style.height = (Math.random() * 8 + 5) + 'px';
+    p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    p.style.animationDuration = (Math.random() * 2 + 2) + 's';
+    p.style.animationDelay = (Math.random() * 1) + 's';
+    box.appendChild(p);
+  }
+  setTimeout(() => box.innerHTML = '', 4500);
+}
+
+// ========== UTILS ==========
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ========== EVENTS ==========
+document.getElementById('btnStart').addEventListener('click', startMeasure);
+document.getElementById('btnNew').addEventListener('click', newRound);
+document.getElementById('btnRename').addEventListener('click', renameTeams);
+document.getElementById('btnReset').addEventListener('click', resetAll);
+
+document.querySelectorAll('.dur-chip').forEach(c => {
+  c.addEventListener('click', () => {
+    if (measuring) return;
+    duration = parseInt(c.dataset.d);
+    document.querySelectorAll('.dur-chip').forEach(x => x.classList.toggle('active', x === c));
+    document.getElementById('liveTimer').textContent = duration;
+  });
+});
+
+// Spacebar shortcut → start measure
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space' && !measuring && selectedId) { e.preventDefault(); startMeasure(); }
+});
+
+// ========== BOOT ==========
+initState();
+initBars();
+renderTeams();
+renderRanking();
+updateLiveLabel();
+if (selectedId) document.getElementById('btnStart').disabled = false;
+</script>
 </body>
 </html>
